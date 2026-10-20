@@ -1,0 +1,72 @@
+/Documenti/
+/istruzioni.md
+/verifica_indipendenza.md
+
+# Dependencies and package manager caches
+node_modules/
+.npm/
+.pnpm-store/
+.yarn/cache/
+.yarn/unplugged/
+.pnp.*
+
+# Production output and generated files
+dist/
+build/
+coverage/
+*.tsbuildinfo
+.vite/
+.cache/
+.eslintcache
+
+# Local environment and credentials (keep the documented example)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+.npmrc.local
+
+# Hosting and local deployment state
+.vercel/
+.netlify/
+.wrangler/
+.openai/
+
+# Original site captures and unoptimized source assets
+research/
+original-home.html
+public/images/
+src/data/original.json
+
+# Local verification artifacts
+test-results/
+playwright-report/
+screenshots/
+artifacts/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editors and operating system files
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~
+
+# Local archives and temporary files
+*.tmp
+*.temp
+*.bak
+
+node_modules

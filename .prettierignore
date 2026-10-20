@@ -1,0 +1,11 @@
+node_modules/
+dist/
+research/
+Documenti/
+artifacts/
+public/
+package-lock.json
+src/data/media.json
+src/data/galleries.json
+src/data/original.json
+original-home.html
