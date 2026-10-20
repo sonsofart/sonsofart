@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { LazyMotion, domAnimation, MotionConfig } from 'motion/react';
-import { Header, Footer, PrivacyPanel } from './components';
+import { Header, Footer, PrivacyPanel, CookieNotice } from './components';
 import {
   Home,
   Projects,
@@ -15,8 +15,10 @@ import {
 } from './pages';
 import { projects, routeMeta } from './data/content';
 import { getSeo } from './seo';
+import { hasSavedPrivacyNotice, savePrivacyNotice } from './privacy';
 export function App() {
   const [privacy, setPrivacy] = useState(false);
+  const [notice, setNotice] = useState(false);
   const location = useLocation();
   useEffect(() => {
     const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
@@ -60,14 +62,16 @@ export function App() {
   }, [location.pathname]);
   useEffect(() => {
     try {
-      const raw = localStorage.getItem('soa-privacy-notice');
-      if (raw) {
-        const value = JSON.parse(raw);
-        if (!value.acknowledgedAt || Date.now() - value.acknowledgedAt > 183 * 86400000)
-          localStorage.removeItem('soa-privacy-notice');
-      }
-    } catch {}
+      setNotice(!hasSavedPrivacyNotice(localStorage));
+    } catch {
+      setNotice(true);
+    }
   }, []);
+  function rememberNotice() {
+    savePrivacyNotice();
+    setNotice(false);
+    setPrivacy(false);
+  }
   return (
     <LazyMotion features={domAnimation} strict>
       <MotionConfig reducedMotion="user">
@@ -97,7 +101,21 @@ export function App() {
           </Routes>
         </main>
         <Footer onPrivacy={() => setPrivacy(true)} />
-        <PrivacyPanel open={privacy} onClose={() => setPrivacy(false)} />
+        {notice && !privacy && (
+          <CookieNotice
+            onAccept={rememberNotice}
+            onSettings={() => setPrivacy(true)}
+            onDismiss={() => setNotice(false)}
+          />
+        )}
+        <PrivacyPanel
+          open={privacy}
+          onClose={() => {
+            setPrivacy(false);
+            setNotice(false);
+          }}
+          onRemember={rememberNotice}
+        />
       </MotionConfig>
     </LazyMotion>
   );

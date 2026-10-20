@@ -199,13 +199,13 @@ Implementation guidance was checked against official sources on **20 October 202
 
 The application installs no analytics, advertising scripts, tracking pixels, session recording, third-party fonts or remote image dependencies. YouTube links open the external site instead of loading a player. The game is also opened as a separate service.
 
-The footer’s **Privacy settings** dialog explains this behavior. A visitor may explicitly save acknowledgement of the notice. Only that action writes the following local storage value:
+A **cookie and privacy notice appears on the first visit**, on any page, unless a valid saved acknowledgement already exists. The **Accept essential only** button remembers the notice preference; **Privacy settings** opens the detailed dialog, also available from the footer. These actions do not enable tracking. A visitor may also save acknowledgement in that dialog. Only an explicit save writes the following local storage value:
 
 | Key                  | Contents                                                            | Retention                                                      |
 | -------------------- | ------------------------------------------------------------------- | -------------------------------------------------------------- |
 | `soa-privacy-notice` | Notice version and acknowledgement timestamp; no visitor identifier | Up to six months; expired values are removed on the next visit |
 
-Closing the dialog or continuing without saving writes nothing. This preference does not activate analytics or advertising. Because no non-essential trackers are installed, the UI does not ask visitors to accept fictitious tracking categories.
+Closing the banner or dialog, or continuing without saving, writes nothing and dismisses the notice for the current visit. It may reappear on a subsequent visit. Saved choices are respected across pages and reloads, and expire after six months; invalid or outdated records trigger a fresh notice. If browser storage is unavailable, the site remains usable. This preference does not activate analytics or advertising. Because no non-essential trackers are installed, the UI does not ask visitors to accept fictitious tracking categories.
 
 The application’s lack of tracking does not mean that a hosting or email provider processes no personal data. Technical requests can include IP addresses, browser information and timestamps. Provider configuration and actual data flows must match the published notice.
 

@@ -1142,9 +1142,11 @@ export function Legal({ kind }: { kind: 'privacy' | 'cookies' | 'terms' }) {
               </table>
             </div>
             <p>
-              This optional preference is stored only when you select “Got it — save my preference”
-              in Privacy settings. Closing the panel or continuing without saving writes nothing. It
-              is not used to measure visits or track you.
+              A cookie and privacy notice appears on your first visit. This optional preference is
+              stored only when you select “Accept essential only” in the notice or “Got it — save my
+              preference” in Privacy settings. Dismissing the notice or continuing without saving
+              writes nothing; the notice may appear again on your next visit. It is not used to
+              measure visits or track you.
             </p>
             <h2>3. Your choices</h2>
             <p>

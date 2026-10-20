@@ -302,21 +302,61 @@ export function Footer({ onPrivacy }: { onPrivacy: () => void }) {
     </footer>
   );
 }
-export function PrivacyPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function CookieNotice({
+  onAccept,
+  onSettings,
+  onDismiss,
+}: {
+  onAccept: () => void;
+  onSettings: () => void;
+  onDismiss: () => void;
+}) {
+  return (
+    <section className="cookie-notice" aria-label="Cookie and privacy notice">
+      <button
+        className="cookie-notice-close"
+        onClick={onDismiss}
+        aria-label="Dismiss cookie notice without saving"
+      >
+        <X size={18} />
+      </button>
+      <ShieldCheck size={24} className="text-accent" aria-hidden="true" />
+      <div className="cookie-notice-copy">
+        <h2>Your privacy comes first.</h2>
+        <p>
+          No analytics or advertising cookies. We only save your notice preference when you confirm.{' '}
+          <Link to="/cookies/">Cookie Policy</Link>
+          {' · '}
+          <Link to="/privacy/">Privacy Policy</Link>
+        </p>
+      </div>
+      <div className="cookie-notice-actions">
+        <button className="button" onClick={onAccept}>
+          Accept essential only
+          <ArrowRight size={16} aria-hidden="true" />
+        </button>
+        <button className="cookie-settings-button" onClick={onSettings}>
+          Privacy settings
+        </button>
+      </div>
+    </section>
+  );
+}
+
+export function PrivacyPanel({
+  open,
+  onClose,
+  onRemember,
+}: {
+  open: boolean;
+  onClose: () => void;
+  onRemember: () => void;
+}) {
   const ref = useRef<HTMLDialogElement>(null);
   useEffect(() => {
     if (open && !ref.current?.open) ref.current?.showModal();
     else if (!open && ref.current?.open) ref.current.close();
   }, [open]);
-  function save() {
-    try {
-      localStorage.setItem(
-        'soa-privacy-notice',
-        JSON.stringify({ version: 1, acknowledgedAt: Date.now() }),
-      );
-    } catch {}
-    onClose();
-  }
   return (
     <dialog
       ref={ref}
@@ -360,7 +400,7 @@ export function PrivacyPanel({ open, onClose }: { open: boolean; onClose: () => 
           Read our Cookie Policy.
         </Link>
       </p>
-      <button className="button w-full justify-center" onClick={save}>
+      <button className="button w-full justify-center" onClick={onRemember}>
         Got it — save my preference
         <ArrowRight size={17} />
       </button>
