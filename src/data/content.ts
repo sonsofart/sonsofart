@@ -86,6 +86,22 @@ export const projects = [
     body: 'Created to mark a community platform anniversary, this special project pays homage to Italian creativity, tradition and timeless style. The Vespa becomes a meeting point between elegance and innovation, translating a familiar design icon into a digital experience.',
     details: ['Italian design inspiration', '3D asset included', 'Anniversary artwork'],
   },
+  {
+    slug: 'iconic-rides-legends',
+    name: 'Iconic Rides Legends',
+    category: 'Digital art',
+    label: 'Legends never stand still.',
+    image: 'iconic-rides-ferrari-f40.webp',
+    color: '#cf7453',
+    description:
+      'Legendary Car of Iconic Rides Legends, a unique NFT collection of the most iconic cars in history, a celebration of the design, speed and innovative spirit that has defined every automotive era',
+    body: 'From vintage racing silhouettes to supercar dreams and a new electric era, Iconic Rides Legends brings automotive character into a vivid world of digital art. Discover a curated selection of the collection, with bold colours, expressive settings and a different perspective on familiar icons.',
+    details: [
+      'Automotive-inspired NFT collection',
+      'A celebration of design and innovation',
+      'Original digital artworks',
+    ],
+  },
 ];
 export type Project = (typeof projects)[number];
 export const principles = [
@@ -149,7 +165,7 @@ export const routeMeta: Record<string, { title: string; description: string }> =
   '/nfts-2-0/': {
     title: 'Projects & NFT 2.0 Collections | Sons of Art',
     description:
-      'Explore all seven Sons of Art projects, from Lukso Family Game and SPUMA music to DJ Pigs, Reborn and 1,000 Winged Legends.',
+      'Explore Sons of Art projects: Lukso Family Game, SPUMA music, DJ Pigs, Winged Legends and the automotive art of Iconic Rides Legends.',
   },
   '/roadmap/': {
     title: 'Our Creative Roadmap | Sons of Art',

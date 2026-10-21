@@ -17,6 +17,7 @@ import {
   Gamepad2,
 } from 'lucide-react';
 import { Art, Button, Eyebrow, Reveal, ProjectCard, Accordion } from './components';
+import { iconicRidesArtworks } from './data/iconic-rides';
 import {
   projects,
   principles,
@@ -68,7 +69,7 @@ export function Home() {
           <div className="hero-art">
             <div className="art-topline">
               <span>FROM THE SONS OF ART UNIVERSE</span>
-              <span>01 — 07</span>
+              <span>01 — {String(projects.length).padStart(2, '0')}</span>
             </div>
             <Link
               to="/dj-pigs-collection/"
@@ -249,6 +250,34 @@ export function Home() {
           ))}
         </div>
       </section>
+      <section className="rides-spotlight shell">
+        <Link
+          to="/iconic-rides-legends/"
+          className="rides-spotlight-art"
+          aria-label="Discover Iconic Rides Legends"
+        >
+          <Art
+            image="iconic-rides-ferrari-f40.webp"
+            alt="A red Ferrari F40 reimagined in the vivid pop-art style of Iconic Rides Legends"
+          />
+          <span className="rides-spotlight-badge">
+            <ArrowUpRight size={24} />
+          </span>
+        </Link>
+        <div className="rides-spotlight-copy">
+          <Eyebrow>NEW PROJECT / ICONIC RIDES LEGENDS</Eyebrow>
+          <h2>
+            Legends never
+            <br />
+            <span className="serif-word">stand still.</span>
+          </h2>
+          <p>
+            Iconic cars. Bold perspectives. A celebration of the design, speed and innovative spirit
+            that has defined every automotive era.
+          </p>
+          <Button to="/iconic-rides-legends/">Explore Iconic Rides Legends</Button>
+        </div>
+      </section>
       <section className="music-feature shell">
         <Reveal className="music-art">
           <Art
@@ -378,7 +407,7 @@ export function Projects() {
                 key={f}
               >
                 {f}
-                {f === 'All projects' && <span>07</span>}
+                {f === 'All projects' && <span>{String(projects.length).padStart(2, '0')}</span>}
               </button>
             ))}
           </div>
@@ -455,7 +484,7 @@ export function ProjectDetail({ project: p }: { project: Project }) {
           </div>
           <span className="project-counter">
             {String(index + 1).padStart(2, '0')}
-            <span> / 07</span>
+            <span> / {String(projects.length).padStart(2, '0')}</span>
           </span>
         </div>
         <div className="project-lead-grid">
@@ -485,7 +514,11 @@ export function ProjectDetail({ project: p }: { project: Project }) {
             )}
             <div className="detail-meta">
               <span>CREATED BY SONS OF ART</span>
-              <span>LUKSO / NFT 2.0</span>
+              <span>
+                {p.slug === 'iconic-rides-legends'
+                  ? 'AUTOMOTIVE ART / NFT COLLECTION'
+                  : 'LUKSO / NFT 2.0'}
+              </span>
             </div>
           </div>
         </div>
@@ -536,7 +569,9 @@ export function ProjectDetail({ project: p }: { project: Project }) {
           </div>
         </section>
       )}
-      {p.slug === 'winged-legends' ? (
+      {p.slug === 'iconic-rides-legends' ? (
+        <IconicRidesGallery />
+      ) : p.slug === 'winged-legends' ? (
         <>
           <section className="shell winged-intro-art">
             <Art image="ali-logo2.jpeg" alt="Winged Legends original collection emblem" />
@@ -636,6 +671,61 @@ export function ProjectDetail({ project: p }: { project: Project }) {
   );
 }
 
+function IconicRidesGallery() {
+  const [selected, setSelected] = useState<(typeof iconicRidesArtworks)[number] | null>(null);
+  return (
+    <section className="section shell rides-gallery">
+      <div className="section-heading">
+        <div>
+          <Eyebrow>CURATED FROM THE COLLECTION</Eyebrow>
+          <h2>
+            An icon for
+            <br />
+            <span className="serif-word">every era.</span>
+          </h2>
+        </div>
+        <p>
+          A selection of {iconicRidesArtworks.length} original artworks.
+          <br />
+          Different silhouettes. The same legendary spirit.
+        </p>
+      </div>
+      <div className="rides-artwork-grid">
+        {iconicRidesArtworks.map((art, i) => (
+          <Reveal key={art.image} delay={(i % 3) * 0.04}>
+            <figure className="ride-artwork">
+              <button aria-label={'View ' + art.name + ' artwork'} onClick={() => setSelected(art)}>
+                <Art
+                  image={art.image}
+                  alt={art.name + ' reimagined in vivid pop-art colours — Iconic Rides Legends'}
+                />
+                <span className="ride-open">
+                  <ArrowUpRight size={20} />
+                </span>
+              </button>
+              <figcaption>
+                <div>
+                  <span className="ride-index">{String(i + 1).padStart(2, '0')}</span>
+                  <h3>{art.name}</h3>
+                </div>
+                <p>{art.theme}</p>
+              </figcaption>
+            </figure>
+          </Reveal>
+        ))}
+      </div>
+      {selected && (
+        <ArtworkDialog
+          image={selected.image}
+          collection="Iconic Rides Legends"
+          caption={selected.name}
+          onClose={() => setSelected(null)}
+        />
+      )}
+    </section>
+  );
+}
+
 function WingedGallery({ images }: { images: string[] }) {
   const [page, setPage] = useState(0);
   const [query, setQuery] = useState('');
@@ -708,13 +798,24 @@ function WingedGallery({ images }: { images: string[] }) {
   );
 }
 
-function ArtworkDialog({ image, onClose }: { image: string; onClose: () => void }) {
+function ArtworkDialog({
+  image,
+  onClose,
+  collection = 'Winged Legends',
+  caption,
+}: {
+  image: string;
+  onClose: () => void;
+  collection?: string;
+  caption?: string;
+}) {
+  const artworkCaption = caption || 'Artwork ' + image.replace('.jpg', '');
   return (
     <div className="lightbox" role="presentation" onClick={onClose}>
       <div
         role="dialog"
         aria-modal="true"
-        aria-label="Winged Legends artwork preview"
+        aria-label={collection + ' artwork preview'}
         className="lightbox-inner"
         ref={(el) => {
           if (el) {
@@ -733,8 +834,10 @@ function ArtworkDialog({ image, onClose }: { image: string; onClose: () => void 
         <button onClick={onClose} aria-label="Close artwork preview">
           Close ×
         </button>
-        <Art image={image} alt={'Winged Legends artwork ' + image.replace('.jpg', '')} />
-        <span>WINGED LEGENDS / ARTWORK {image.replace('.jpg', '')}</span>
+        <Art image={image} alt={collection + ' — ' + artworkCaption} />
+        <span>
+          {collection.toUpperCase()} / {artworkCaption}
+        </span>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import assert from 'node:assert/strict';
+import { transform } from 'esbuild';
 import { load } from 'cheerio';
 
 const root = path.resolve('dist');
@@ -26,7 +26,25 @@ try {
   throw Error('Build output missing. Run npm run build before npm run check.');
 }
 const pages = output.filter((f) => f.endsWith('.html'));
-check(pages.length === 17, `Expected 16 public pages plus 404; found ${pages.length}`);
+const { code } = await transform(await fs.readFile('src/data/content.ts', 'utf8'), {
+  loader: 'ts',
+  format: 'esm',
+});
+const { routeMeta } = await import(
+  'data:text/javascript;base64,' + Buffer.from(code).toString('base64')
+);
+const expectedRoutes = Object.keys(routeMeta);
+check(
+  pages.length === expectedRoutes.length + 1,
+  `Expected ${expectedRoutes.length} public pages plus 404; found ${pages.length}`,
+);
+for (const route of expectedRoutes) {
+  try {
+    await fs.access(path.join(root, route, 'index.html'));
+  } catch {
+    check(false, 'Missing prerendered page: ' + route);
+  }
+}
 const titles = new Set();
 const descriptions = new Set();
 const localLinks = new Set();
@@ -111,7 +129,17 @@ for (const f of ['instruction-manual.pdf', 'printable-deck.pdf', 'game-examples.
 }
 const sitemap = await fs.readFile('dist/sitemap.xml', 'utf8');
 const xml = load(sitemap, { xml: true });
-check(xml('url').length === 16, 'Sitemap should list 16 routes');
+check(
+  xml('url').length === expectedRoutes.length,
+  `Sitemap should list ${expectedRoutes.length} routes`,
+);
+const sitemapPaths = new Set(
+  xml('loc')
+    .map((_, el) => new URL(xml(el).text()).pathname)
+    .get(),
+);
+for (const route of expectedRoutes)
+  check(sitemapPaths.has(route), 'Route missing from sitemap: ' + route);
 const robots = await fs.readFile('dist/robots.txt', 'utf8');
 check(
   robots.includes('Allow: /') && robots.includes('Sitemap: '),

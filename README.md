@@ -108,6 +108,7 @@ The original page paths are retained:
 | `/winged-legends/`                   | Collection story and paginated gallery of 998 available artworks                           |
 | `/the-winged-legends-hunters/`       | Story NFT and Magic Net asset imagery                                                      |
 | `/vespa-universal-page-anniversary/` | Vespa anniversary project archive                                                          |
+| `/iconic-rides-legends/`             | Automotive NFT collection with 12 curated original artworks                                |
 | `/contact/`                          | Contact details and local email preparation                                                |
 | `/support-faq/`                      | Accessible project and platform questions                                                  |
 | `/game-simulation/`                  | Illustrated example moves and downloadable PDF                                             |
@@ -116,6 +117,8 @@ The original page paths are retained:
 | `/terms/`                            | Project information, website terms and rights notices                                      |
 
 The old marketplace links and obsolete minting calls to action have been removed. The historical Vespa project URL remains for continuity; retaining that route does not create an external marketplace dependency.
+
+**Iconic Rides Legends** is also featured on the homepage, in project navigation and in the searchable archive. The collection page preserves the supplied description and presents 12 selected artworks spanning vintage racing cars, everyday icons, sports cars, supercars and an electric interpretation. Ferrari F40 artwork serves as the cover. The original images in `Documenti/Macchine` remain unchanged and excluded from Git; optimized WebP copies are committed under `public/media/`. Selection labels are maintained in `src/data/iconic-rides.ts`. The optional `node scripts/import-iconic-rides.mjs` utility recreates those copies when the local source folder is available; it is not required for a normal build or deployment.
 
 ## Project structure
 
